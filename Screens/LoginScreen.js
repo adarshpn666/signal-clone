@@ -3,15 +3,28 @@ import React, { useState } from 'react';
 import { KeyboardAvoidingView } from 'react-native';
 import { StyleSheet, Text, View } from 'react-native';
 import {Button, Input, Image} from 'react-native-elements';
+import { auth } from '../firebase';
 
-const  LoginScreen = () => {
+const  LoginScreen = ({navigation}) => {
 
   const [email,setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const signIn = () => {
+  useState(()=>{
+    const unsubscribe = auth.onAuthStateChanged((authUser)=>{
+      if(authUser){
+        navigation.replace("Home");
+      }
+    });
 
-  }
+    return unsubscribe;
+
+  },[]);
+
+  const signIn = () => {
+    auth.signInWithEmailAndPassword(email, password)
+    .catch((error) => alert(error));
+  };
 
 
   return (
@@ -35,11 +48,12 @@ const  LoginScreen = () => {
           type = "password" 
           value = {password}
           onChangeText = {(text) => setPassword(text)} 
+          onSubmitEditing = {signIn}
           secureTextEntry/>
         </View>
 
         <Button title ='Login' containerStyle = {styles.button} onPress = {signIn}/>
-        <Button title = 'Register' type ='outline' containerStyle = {styles.button}/>
+        <Button onPress = {() => navigation.navigate('Register')} title = 'Register' type ='outline' containerStyle = {styles.button}/>
         <View style = {{height:50}}></View>
 
       </KeyboardAvoidingView>
