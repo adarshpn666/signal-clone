@@ -9,8 +9,10 @@ import RegisterScreen from './Screens/RegisterScreen';
 import HomeScreen from './Screens/HomeScreen';
 import AddChatScreen from './Screens/AddChatScreen';
 import ChatScreen from './Screens/ChatScreen';
+import { LogBox } from 'react-native';
 
 
+LogBox.ignoreLogs(['Setting a timer for a long period of time']);
 const Stack = createStackNavigator();
 
 const globalScreenOptions = {
